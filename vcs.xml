@@ -360,6 +360,6 @@
         </UrlAndUserName>
       </list>
     </option>
-    <option name="cloneParentDir" value="$USER_HOME$/suyehe/project" />
+    <option name="cloneParentDir" value="$USER_HOME$/suyehe" />
   </component>
 </application>
