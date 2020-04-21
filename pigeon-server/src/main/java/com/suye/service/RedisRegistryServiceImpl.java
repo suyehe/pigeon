@@ -24,7 +24,6 @@ import java.util.Objects;
  */
 @RequiredArgsConstructor
 @Slf4j
-@Service
 public class RedisRegistryServiceImpl implements RegistryService {
 
     private final RedisTemplate<String, String> redisTemplate;
