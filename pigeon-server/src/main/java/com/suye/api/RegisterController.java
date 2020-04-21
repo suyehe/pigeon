@@ -27,8 +27,4 @@ public class RegisterController {
     public Session register(@RequestBody RegisterSessionReq register) {
         return sessionService.generate(register.getUserId(), register.getAppId(), register.getProtocol());
     }
-
-    public Collection<Session> queryAllLine(){
-        return NameSpace.all();
-    }
 }

@@ -19,8 +19,8 @@ public class SessionService {
 
     @Autowired
     private RedisTemplate<String,Session> sessionRedisTemplate;
-
-    private RegistryService redisRegistryService=RedisRegistryServiceImpl.getRegistryService();
+    @Autowired
+    private RegistryService registryService;
 
 
 
@@ -29,7 +29,7 @@ public class SessionService {
         session.setUserId(id);
         session.setAppId(app);
         session.setProtocol(protocol);
-        session.setServerAddr(redisRegistryService.lookProtocolServer(protocol));
+        session.setServerAddr(registryService.lookProtocolServer(protocol));
         session.setSessionId(UUID.randomUUID().toString());
         session.setToken(UUID.randomUUID().toString());
         sessionRedisTemplate.opsForValue().set(session.getToken(),session);

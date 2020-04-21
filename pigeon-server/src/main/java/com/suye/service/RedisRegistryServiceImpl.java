@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -23,14 +24,13 @@ import java.util.Objects;
  */
 @RequiredArgsConstructor
 @Slf4j
+@Service
 public class RedisRegistryServiceImpl implements RegistryService {
 
     private final RedisTemplate<String, String> redisTemplate;
     private final String serverAddr;
     private final Protocol protocol;
-    @Setter
-    @Getter
-    private static RegistryService registryService;
+
 
     private static final String session_local_key="session_local_key";
 

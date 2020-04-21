@@ -6,6 +6,7 @@ import com.suye.consts.Protocol;
 import com.suye.dto.MessageBody;
 import com.suye.dto.Session;
 import com.suye.service.MessageDisruptor;
+import com.suye.service.NameSpace;
 import com.suye.service.RedisRegistryServiceImpl;
 import com.suye.service.RegistryService;
 import com.suye.utils.NetUtil;
@@ -54,7 +55,7 @@ public class RedisConfig {
     @Bean
     RegistryService registryService(StringRedisTemplate redisTemplate) {
         RedisRegistryServiceImpl registryService = new RedisRegistryServiceImpl(redisTemplate, NetUtil.getLocalIp() + ":" + port, Protocol.WEBSOCKET);
-        RedisRegistryServiceImpl.setRegistryService(registryService);
+        NameSpace.setRegistryService(registryService);
         return registryService;
     }
 

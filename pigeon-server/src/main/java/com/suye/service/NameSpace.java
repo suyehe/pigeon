@@ -6,6 +6,7 @@ import com.suye.netty.RpcClientBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -24,6 +25,9 @@ import java.util.concurrent.Executors;
  */
 @Slf4j
 public class NameSpace {
+    @Setter
+    private static  RegistryService registryService;
+
 
     private static final Map<String,AppNamespace> namespace=Maps.newConcurrentMap();
 
@@ -52,7 +56,7 @@ public class NameSpace {
             session.setActive(true);
             getAppNamespace(session.getAppId()).groupSession(session);
             log.debug("session:{} connect",session);
-            RedisRegistryServiceImpl.getRegistryService().registerSession(session);
+            registryService.registerSession(session);
         });
     }
 
@@ -72,7 +76,7 @@ public class NameSpace {
 
 
     public static Channel remoteChannel(String sessionId) {
-        return REMOTE_CHANNELS.computeIfAbsent(RedisRegistryServiceImpl.getRegistryService().lookUpSessionServer(sessionId), (addr)-> RpcClientBootstrap.getchannel(addr,RedisRegistryServiceImpl.getRegistryService().lookUpServerProtocol(addr)));
+        return REMOTE_CHANNELS.computeIfAbsent(registryService.lookUpSessionServer(sessionId), (addr)-> RpcClientBootstrap.getchannel(addr,registryService.lookUpServerProtocol(addr)));
     }
 
 
@@ -91,7 +95,7 @@ public class NameSpace {
     private static void close(ChannelFuture future) {
         Session session = CHANNEL_SESSION.remove(future.channel());
         namespace.get(session.getAppId()).unConnect(session);
-        RedisRegistryServiceImpl.getRegistryService().unRegisterSession(session);
+        registryService.unRegisterSession(session);
         future.channel().closeFuture().removeListener(remover);
     }
 }

@@ -4,6 +4,7 @@ import com.suye.consts.Protocol;
 import com.suye.dto.Session;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -13,9 +14,8 @@ import java.util.UUID;
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
 public class RedisRegistryServiceImplTest {
-
-    private final RegistryService registryService = RedisRegistryServiceImpl.getRegistryService();
-
+    @Autowired
+    private  RegistryService registryService;
 
     @Test
     public void registerSession() {
