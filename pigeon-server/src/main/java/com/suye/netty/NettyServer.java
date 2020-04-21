@@ -19,6 +19,8 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
 import java.util.Objects;
@@ -31,10 +33,14 @@ import java.util.Objects;
  * create time 2019/10/25 17:17
  */
 @Slf4j
-public class NettyServer{
-    private int port=8888;
+@Component
+public class NettyServer {
+    private int port = 8888;
 
-    private Protocol protocol =Protocol.WEBSOCKET;
+    private Protocol protocol = Protocol.WEBSOCKET;
+
+    @Autowired
+    private TextWebSocketFrameHandler webSocketFrameHandler;
 
     public void start() {
         ServerBootstrap bootstrap = new ServerBootstrap();
@@ -46,15 +52,15 @@ public class NettyServer{
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel ch) throws Exception {
-                if (Objects.equals(Protocol.WEBSOCKET, protocol)){
+                if (Objects.equals(Protocol.WEBSOCKET, protocol)) {
                     ch.pipeline().addLast(new HttpServerCodec());
                     ch.pipeline().addLast(new HttpObjectAggregator(64 * 1024));
-                    ch.pipeline().addLast(Consts.DISPACHER,new DispatcherHandler());
+                    ch.pipeline().addLast(Consts.DISPACHER, new DispatcherHandler());
                     ch.pipeline().addLast(new ChunkedWriteHandler());
                     ch.pipeline().addLast(new WebSocketServerProtocolHandler("/ws"));
-                    ch.pipeline().addLast(new TextWebSocketFrameHandler());
+                    ch.pipeline().addLast(webSocketFrameHandler);
                 }
-                if (Objects.equals(Protocol.SELF, protocol)){
+                if (Objects.equals(Protocol.SELF, protocol)) {
                     ch.pipeline().addLast(new ObjectDecoder(ClassResolvers.softCachingResolver(String.class.getClassLoader())));
                     ch.pipeline().addLast(new ObjectEncoder());
                     ch.pipeline().addLast(new DispatcherHandler());
@@ -63,9 +69,9 @@ public class NettyServer{
 
             }
         });
-        bootstrap.childOption(ChannelOption.SO_KEEPALIVE,true);
+        bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
         ChannelFuture future = bootstrap.bind(new InetSocketAddress(port));
         future.awaitUninterruptibly();
-        log.info("netty server start at port:{}",port);
+        log.info("netty server start at port:{}", port);
     }
 }

@@ -1,6 +1,6 @@
 import com.alibaba.fastjson.JSON;
 import com.suye.consts.Protocol;
-import com.suye.dto.MessageBody;
+import com.suye.dto.MessageDTO;
 import com.suye.netty.RpcClientBootstrap;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -26,7 +26,7 @@ public class ClientRPCTest {
         while (true) {
             Thread.sleep(1000);
             if (channel.isActive()) {
-                MessageBody body = new MessageBody();
+                MessageDTO body = new MessageDTO();
                 ByteBuffer buffer = ByteBuffer.wrap(JSON.toJSONBytes(body));
                 TextWebSocketFrame frame = new TextWebSocketFrame();
                 channel.writeAndFlush(frame).isSuccess();

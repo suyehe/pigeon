@@ -3,7 +3,7 @@ package com.suye.config;
 import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
 import com.suye.consts.Consts;
 import com.suye.consts.Protocol;
-import com.suye.dto.MessageBody;
+import com.suye.dto.MessageDTO;
 import com.suye.dto.Session;
 import com.suye.service.MessageDisruptor;
 import com.suye.service.NameSpace;
@@ -60,16 +60,14 @@ public class RedisConfig {
     }
 
     @Bean
-    MessageDisruptor messageHandler(RedisTemplate<String,MessageBody> template) {
-        MessageDisruptor.setExecutor(Executors.newFixedThreadPool(4));
-        MessageDisruptor.setRedisTemplate(template);
-        return new MessageDisruptor();
+    MessageDisruptor disruptor(RegistryService registryService,RedisTemplate<String,MessageDTO> template) {
+        return  new MessageDisruptor(Executors.newFixedThreadPool(4),registryService,template);
     }
 
     @Bean
-    MessageListenerAdapter listenerAdapter(MessageDisruptor disrupter) {
-        RedisSerializer<?> serializer = new FastJsonRedisSerializer<>(MessageBody.class);
-        MessageListenerAdapter listenerAdapter = new MessageListenerAdapter(disrupter, "onMessage");
+    MessageListenerAdapter listenerAdapter(MessageDisruptor disruptor) {
+        RedisSerializer<?> serializer = new FastJsonRedisSerializer<>(MessageDTO.class);
+        MessageListenerAdapter listenerAdapter = new MessageListenerAdapter(disruptor, "onMessage");
         listenerAdapter.setSerializer(serializer);
         return listenerAdapter;
     }
@@ -86,10 +84,10 @@ public class RedisConfig {
     }
 
     @Bean
-    RedisTemplate<String, MessageBody> messageBodyRedisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, MessageBody> template = new RedisTemplate<>();
+    RedisTemplate<String, MessageDTO> messageBodyRedisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, MessageDTO> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
-        template.setDefaultSerializer(new FastJsonRedisSerializer<>(MessageBody.class));
+        template.setDefaultSerializer(new FastJsonRedisSerializer<>(MessageDTO.class));
         SpringContext.regiest("messageBodyRedisTemplate", template);
         return template;
 

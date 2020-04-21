@@ -81,9 +81,9 @@ public class NameSpace {
 
 
 
-    public static Channel getChannel(String sessionId) {
+    public static Channel getChannel(Long userId) {
         for (Map.Entry<Channel, Session> entry : CHANNEL_SESSION.entrySet()) {
-            if (Objects.equals(entry.getValue().getSessionId(), sessionId)) {
+            if (Objects.equals(entry.getValue().getUserId(), userId)) {
                 return entry.getKey();
             }
         }

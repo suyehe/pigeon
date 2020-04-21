@@ -10,7 +10,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Objects;
@@ -23,9 +25,10 @@ import java.util.Objects;
  * create time 2020/3/16 15:15
  */
 @ChannelHandler.Sharable
+@Component
 public class DispatcherHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
-
-    private RedisTemplate<String,Session> redisTemplate=SpringContext.getBean("sessionRedisTemplate");
+    @Autowired
+    private RedisTemplate<String,Session> redisTemplate;
 
     private static final String split_string="[?]";
 

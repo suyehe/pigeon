@@ -2,7 +2,6 @@ package com.suye.netty;
 
 import com.suye.consts.Protocol;
 import com.suye.dto.RequestMessage;
-import com.suye.dto.Session;
 import com.suye.service.MessageDisruptor;
 import com.suye.service.NameSpace;
 import io.netty.channel.ChannelHandler;
@@ -11,6 +10,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.net.ssl.HandshakeCompletedEvent;
@@ -23,12 +23,14 @@ import javax.net.ssl.HandshakeCompletedEvent;
 @ChannelHandler.Sharable
 @Slf4j
 public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
+    @Autowired
+    private MessageDisruptor disruptor;
 
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        if (evt instanceof HandshakeCompletedEvent){
-           NameSpace.connect(ctx.channel());
+        if (evt instanceof HandshakeCompletedEvent) {
+            NameSpace.connect(ctx.channel());
         }
     }
 
@@ -39,7 +41,7 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<WebSo
             requestMessage.setChannel(ctx.channel());
             requestMessage.setProtocol(Protocol.WEBSOCKET);
             requestMessage.setBody(((TextWebSocketFrame) msg).text());
-            MessageDisruptor.handlerMsg(requestMessage);
+            disruptor.handlerMsg(requestMessage);
         }
 
     }

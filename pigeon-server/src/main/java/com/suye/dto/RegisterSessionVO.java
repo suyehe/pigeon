@@ -12,7 +12,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class RegisterSessionReq {
+public class RegisterSessionVO {
 
     private long userId;
 
