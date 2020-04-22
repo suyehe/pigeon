@@ -1,0 +1,12 @@
+<application>
+  <component name="FileTypeManager" version="17">
+    <extensionMap>
+      <mapping pattern="Dockerfile" type="PLAIN_TEXT" />
+      <mapping pattern="hello" type="PLAIN_TEXT" />
+      <mapping pattern="README" type="PLAIN_TEXT" />
+      <mapping ext="def" type="PLAIN_TEXT" />
+      <mapping ext="properries" type="PLAIN_TEXT" />
+      <mapping ext="id" type="PLAIN_TEXT" />
+    </extensionMap>
+  </component>
+</application>
