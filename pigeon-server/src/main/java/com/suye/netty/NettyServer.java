@@ -20,8 +20,10 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.net.InetSocketAddress;
 import java.util.Objects;
 
@@ -35,7 +37,8 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class NettyServer {
-    private int port = 8888;
+    @Value("${pigeon.port}")
+    private Integer port;
 
     private Protocol protocol = Protocol.WEBSOCKET;
 
@@ -44,7 +47,7 @@ public class NettyServer {
 
     @Autowired
     private DispatcherHandler dispatcherHandler;
-
+    @PostConstruct
     public void start() {
         ServerBootstrap bootstrap = new ServerBootstrap();
         EventLoopGroup parentGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("parentGroup"));
