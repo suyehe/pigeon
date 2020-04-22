@@ -1,0 +1,11 @@
+{
+  "hints": [],
+  "properties": [
+    {
+      "defaultValue": 8888,
+      "name": "pigeon.port",
+      "type": "java.lang.Integer"
+    }
+
+  ]
+}
