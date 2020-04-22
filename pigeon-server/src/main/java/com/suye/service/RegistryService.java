@@ -16,7 +16,7 @@ public interface RegistryService{
 
     void  unRegisterSession(Session session);
 
-    String lookUpSessionServer(String sessionId);
+    String lookUpSessionServer(Long userId);
 
     Protocol lookUpServerProtocol(String addr);
 

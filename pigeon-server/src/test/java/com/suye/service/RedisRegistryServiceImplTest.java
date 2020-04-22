@@ -36,7 +36,7 @@ public class RedisRegistryServiceImplTest {
 
     @Test
     public void lookUpSessionServer() {
-        String server = registryService.lookUpSessionServer("9999");
+        String server = registryService.lookUpSessionServer(10086L);
         assert server.equals(registryService.getLocalServerAddr());
     }
 

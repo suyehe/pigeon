@@ -12,7 +12,7 @@
         }
         if (window.WebSocket) {
             //socket = new WebSocket("ws://localhost:9999/ws?token=ae766e27-04c3-487f-9f29-0f8c402077be");
-            socket = new WebSocket("ws://192.168.201.180:8888/ws?token=ae766e27-04c3-487f-9f29-0f8c402077be");
+            socket = new WebSocket("ws://192.168.201.180:8888/ws?token=5618526e-281a-439d-98c5-6845c5d0d1e7");
             socket.onmessage = function (event) {
                 var ta = document.getElementById("responseContent");
                 ta.value += event.data + "\r\n";

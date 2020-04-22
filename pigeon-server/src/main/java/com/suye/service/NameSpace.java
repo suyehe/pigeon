@@ -75,8 +75,8 @@ public class NameSpace {
     }
 
 
-    public static Channel remoteChannel(String sessionId) {
-        return REMOTE_CHANNELS.computeIfAbsent(registryService.lookUpSessionServer(sessionId), (addr)-> RpcClientBootstrap.getchannel(addr,registryService.lookUpServerProtocol(addr)));
+    public static Channel remoteChannel(Long userId) {
+        return REMOTE_CHANNELS.computeIfAbsent(registryService.lookUpSessionServer(userId), (addr)-> RpcClientBootstrap.getchannel(addr,registryService.lookUpServerProtocol(addr)));
     }
 
 

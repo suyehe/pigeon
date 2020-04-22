@@ -2,6 +2,7 @@ package com.suye.service;
 
 
 import com.suye.consts.Protocol;
+import com.suye.dto.Server;
 import com.suye.dto.Session;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -57,20 +58,20 @@ public class RedisRegistryServiceImpl implements RegistryService {
 
     @Override
     public void registerSession(Session session) {
-        redisTemplate.opsForSet().add(serverAddr,session.getSessionId());
+        redisTemplate.opsForSet().add(serverAddr,String.valueOf(session.getUserId()));
         redisTemplate.opsForHash().put(session_local_key, session.getSessionId(), serverAddr);
     }
 
     @Override
     public void unRegisterSession(Session session) {
-        redisTemplate.opsForSet().remove(serverAddr, session.getSessionId());
-        redisTemplate.opsForHash().delete(session_local_key, session.getSessionId());
+        redisTemplate.opsForSet().remove(serverAddr, String.valueOf(session.getUserId()));
+        redisTemplate.opsForHash().delete(session_local_key, String.valueOf(session.getUserId()));
     }
 
 
     @Override
-    public String lookUpSessionServer(String sessionId) {
-        return (String) redisTemplate.opsForHash().get(session_local_key, sessionId);
+    public String lookUpSessionServer(Long userId) {
+        return (String) redisTemplate.opsForHash().get(session_local_key, String.valueOf(userId));
     }
 
 
@@ -100,6 +101,5 @@ public class RedisRegistryServiceImpl implements RegistryService {
         }
         return null;
     }
-
 
 }
