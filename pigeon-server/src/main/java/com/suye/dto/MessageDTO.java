@@ -14,7 +14,7 @@ public class MessageDTO {
     private Long id;
     private String from;
     private Long to;
-    private Integer sendTime;
+    private Long sendTime;
     private String msg;
     private Integer type;
     private Integer status;
