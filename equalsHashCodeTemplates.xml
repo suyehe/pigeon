@@ -1,5 +1,0 @@
-<application>
-  <component name="EqualsHashCodeTemplates">
-    <option name="defaultTempalteName" value="Objects.equal and hashCode (Guava) equals" />
-  </component>
-</application>
