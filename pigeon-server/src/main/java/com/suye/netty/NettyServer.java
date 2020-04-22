@@ -42,6 +42,9 @@ public class NettyServer {
     @Autowired
     private TextWebSocketFrameHandler webSocketFrameHandler;
 
+    @Autowired
+    private DispatcherHandler dispatcherHandler;
+
     public void start() {
         ServerBootstrap bootstrap = new ServerBootstrap();
         EventLoopGroup parentGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("parentGroup"));
@@ -55,7 +58,7 @@ public class NettyServer {
                 if (Objects.equals(Protocol.WEBSOCKET, protocol)) {
                     ch.pipeline().addLast(new HttpServerCodec());
                     ch.pipeline().addLast(new HttpObjectAggregator(64 * 1024));
-                    ch.pipeline().addLast(Consts.DISPACHER, new DispatcherHandler());
+                    ch.pipeline().addLast(Consts.DISPACHER, dispatcherHandler);
                     ch.pipeline().addLast(new ChunkedWriteHandler());
                     ch.pipeline().addLast(new WebSocketServerProtocolHandler("/ws"));
                     ch.pipeline().addLast(webSocketFrameHandler);
