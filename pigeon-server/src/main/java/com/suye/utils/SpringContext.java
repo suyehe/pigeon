@@ -1,4 +1,4 @@
-package com.suye.config;
+package com.suye.utils;
 
 import com.google.common.collect.Maps;
 

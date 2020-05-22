@@ -10,6 +10,7 @@ import com.suye.service.NameSpace;
 import com.suye.service.RedisRegistryServiceImpl;
 import com.suye.service.RegistryService;
 import com.suye.utils.NetUtil;
+import com.suye.utils.SpringContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

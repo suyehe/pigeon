@@ -2,7 +2,6 @@ package com.suye.netty;
 
 
 import com.google.common.collect.Maps;
-import com.suye.config.SpringContext;
 import com.suye.dto.Session;
 import com.suye.service.NameSpace;
 import io.netty.channel.ChannelHandler;

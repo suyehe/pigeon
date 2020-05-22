@@ -4,6 +4,12 @@ logging:
       suye: debug
 pigeon:
   port: 8888
-
-
+spring:
+  jpa:
+    show-sql: true
+    generate-ddl: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/pigeon?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&verifyServerCertificate=false&useSSL=false
+    username: root
+    password: zxy@1234
 

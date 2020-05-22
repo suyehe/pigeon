@@ -22,6 +22,13 @@ public class Response<T> {
        return response;
    }
 
+    public static  Response success(){
+        Response response = new Response();
+        response.setCode(200);
+        return response;
+    }
+
+
     @Override
     public String toString() {
         return JSON.toJSONString(this);
