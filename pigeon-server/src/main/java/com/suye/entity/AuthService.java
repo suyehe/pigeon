@@ -2,10 +2,12 @@ package com.suye.entity;
 
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.aspectj.bridge.MessageWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,21 +37,20 @@ public class AuthService {
     public SimpleAuthorizationInfo authorizationInfo(UserInfo userInfo) {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         List<UserRole> userRoles = userRoleRepository.queryAllByUserId(userInfo.getUserId());
-        Set<Integer> rolePermissionIds = userRoles.stream().map(UserRole::getRolePermission).collect(Collectors.toSet());
-        List<RolePermission> rolePermissions = rolePermissionRepository.queryAllById(rolePermissionIds);
-        Set<Integer> permissionIds = rolePermissions.stream().map(RolePermission::getPermission).collect(Collectors.toSet());
-        List<Permission> permissions = permissionRepository.queryById(permissionIds);
-        info.setRoles(rolePermissions.stream().map(RolePermission::getRole).collect(Collectors.toSet()));
-        info.setStringPermissions(permissions.stream().map(Permission::getPermission).collect(Collectors.toSet()));
+        Set<String> roles = userRoles.stream().map(UserRole::getRole).collect(Collectors.toSet());
+        List<RolePermission> rolePermissions = rolePermissionRepository.queryAllByRole(roles);
+        Set<String> permissions = rolePermissions.stream().map(RolePermission::getPermission).collect(Collectors.toSet());
+        info.setRoles(roles);
+        info.setStringPermissions(permissions);
         return info;
     }
 
-    public UserInfo userInfo(String userName,String pssword){
+    public UserInfo userInfo(String userName,String password){
         User user = userRepository.getByUsername(userName);
-        UserInfo info = new UserInfo();
-        info.setUserId(user.getId());
-        user.setUsername(userName);
-        return info;
+        if (Objects.nonNull(user)&&Objects.equals(user.getPassword(),password)){
+            return new UserInfo(user.getId(),userName);
+        }
+        return new UserInfo();
 
     }
 

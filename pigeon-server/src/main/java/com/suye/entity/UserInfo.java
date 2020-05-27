@@ -1,7 +1,8 @@
 package com.suye.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -11,9 +12,13 @@ import lombok.Data;
  * create time 2020/4/23 16:16
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserInfo {
 
     private  int userId;
 
     private String userName;
+
+
 }

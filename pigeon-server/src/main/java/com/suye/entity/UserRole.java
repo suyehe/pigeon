@@ -18,6 +18,6 @@ public class UserRole {
   @Id
   private int id;
   private  int userId;
-  private Integer rolePermission;
+  private String role;
 
 }

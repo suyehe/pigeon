@@ -13,5 +13,5 @@ import java.util.Set;
  */
 
 public interface RolePermissionRepository extends JpaRepository<RolePermission,Integer> {
-    List<RolePermission> queryAllById(Set<Integer> ids);
+    List<RolePermission> queryAllByRole(Set<String> ids);
 }

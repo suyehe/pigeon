@@ -5,6 +5,8 @@ import com.suye.dto.Session;
 import com.suye.service.NameSpace;
 import com.suye.service.SessionService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresGuest;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,13 +32,12 @@ public class RegisterController {
     }
 
     @GetMapping("/all")
-    @RequiresAuthentication
+    @RequiresPermissions("client:list")
     public Collection<Session> listAll(){
         return NameSpace.all();
     }
 
     @GetMapping("/admin")
-    @RequiresRoles(value = {"admin"})
     public Collection<Session> sessions(){
         return NameSpace.all();
     }
