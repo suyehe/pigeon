@@ -74,6 +74,10 @@
           <option name="url" value="http://gitlab.dxy.net" />
           <option name="userName" value="zhouxiangyang" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="git@gitlab.dxy.net:platform/sentinel.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="$USER_HOME$/project/prd" />
