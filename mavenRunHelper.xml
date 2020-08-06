@@ -34,6 +34,12 @@
             <Goal>
               <option name="commandLine" value="clean install" />
             </Goal>
+            <Goal>
+              <option name="commandLine" value="package -Dmaven.test.skip=true  -pl dcoin-server -am -e X" />
+            </Goal>
+            <Goal>
+              <option name="commandLine" value="package -Dmaven.test.skip=true" />
+            </Goal>
           </list>
         </option>
       </Goals>
