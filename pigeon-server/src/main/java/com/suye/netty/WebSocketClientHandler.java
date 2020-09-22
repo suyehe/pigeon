@@ -22,7 +22,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
     @SneakyThrows
     public WebSocketClientHandler() {
      handshaker=WebSocketClientHandshakerFactory
-                .newHandshaker(new URI("ws://192.168.202.151:8888/ws"), WebSocketVersion.V08, null, false, new DefaultHttpHeaders());
+                .newHandshaker(new URI("ws://192.168.201.180:8888/ws"), WebSocketVersion.V08, null, false, new DefaultHttpHeaders());
 
     }
 

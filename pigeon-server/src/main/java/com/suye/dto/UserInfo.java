@@ -1,4 +1,4 @@
-package com.suye.entity;
+package com.suye.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

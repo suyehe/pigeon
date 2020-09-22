@@ -1,101 +1,30 @@
 package com.suye.service;
 
-import com.google.common.collect.Maps;
-import com.suye.dto.Session;
-import com.suye.netty.RpcClientBootstrap;
+import com.suye.dao.LineSession;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
+import java.util.Set;
 
-import java.util.Collection;
-import java.util.Map;
-
-import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
- * channel session manage
+ * description
  *
  * @author zxy
- * create time 2020/4/9 14:14
+ * create time 2020/9/16 14:14
  */
-@Slf4j
-public class NameSpace {
-    @Setter
-    private static  RegistryService registryService;
+public interface NameSpace {
 
 
-    private static final Map<String,AppNamespace> namespace=Maps.newConcurrentMap();
+    Channel userChannel(LineSession session);
 
-    private static final Map<String, Channel> REMOTE_CHANNELS = Maps.newConcurrentMap();
+    boolean userOnline(LineSession session);
 
-    private static final Map<Channel,Session> CHANNEL_SESSION=Maps.newConcurrentMap();
+    void userOnline(LineSession session, Channel channel);
 
-    private static ExecutorService connect = Executors.newSingleThreadExecutor();
+    LineSession user(Channel channel);
 
-    private static final ChannelFutureListener remover = NameSpace::close;
+    void offline(ChannelFuture future);
 
-
-
-    public static AppNamespace getAppNamespace(String app){
-        return namespace.putIfAbsent(app,new AppNamespace(app));
-    }
-
-    public static Session bindChannelSession(Channel channel, Session session){
-        return CHANNEL_SESSION.putIfAbsent(channel,session);
-    }
-
-    public static void connect(Channel channel){
-        connect.submit(()->{
-            channel.closeFuture().addListener(remover);
-            Session session = getChannelSession(channel);
-            session.setActive(true);
-            getAppNamespace(session.getAppId()).groupSession(session);
-            log.debug("session:{} connect",session);
-            registryService.registerSession(session);
-        });
-    }
-
-    public static Collection<Session> all(){
-        return CHANNEL_SESSION.values();
-    }
-
-
-
-    public static Session getChannelSession(Channel channel){
-        return CHANNEL_SESSION.get(channel);
-    }
-
-    public static Session getSession(Channel channel){
-        return CHANNEL_SESSION.get(channel);
-    }
-
-
-    public static Channel remoteChannel(Long userId) {
-        return REMOTE_CHANNELS.computeIfAbsent(registryService.lookUpSessionServer(userId), (addr)-> RpcClientBootstrap.getchannel(addr,registryService.lookUpServerProtocol(addr)));
-    }
-
-
-
-    public static Channel getChannel(Long userId) {
-        for (Map.Entry<Channel, Session> entry : CHANNEL_SESSION.entrySet()) {
-            if (Objects.equals(entry.getValue().getUserId(), userId)) {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
-
-
-
-    private static void close(ChannelFuture future) {
-        Session session = CHANNEL_SESSION.remove(future.channel());
-        namespace.get(session.getAppId()).unConnect(session);
-        registryService.unRegisterSession(session);
-        future.channel().closeFuture().removeListener(remover);
-    }
+    Set<LineSession> onlie();
 }
