@@ -2,19 +2,20 @@ package com.suye.netty;
 
 
 import com.google.common.collect.Maps;
-import com.suye.dto.Session;
+import com.suye.consts.Consts;
+import com.suye.dao.LineUser;
 import com.suye.service.NameSpace;
+import com.suye.service.UserService;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
-import java.util.Objects;
+
 
 
 /**
@@ -24,25 +25,28 @@ import java.util.Objects;
  * create time 2020/3/16 15:15
  */
 @ChannelHandler.Sharable
-@Component
-public class DispatcherHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
-    @Autowired
-    private RedisTemplate<String,Session> redisTemplate;
+@RequiredArgsConstructor
+public class PreValidHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
+
 
     private static final String split_string="[?]";
+
+    private final NameSpace nameSpace;
+
+    private  final UserService userService;
+
 
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest msg) throws Exception {
          if (msg.method().equals(HttpMethod.GET)){
-            if (msg.uri().contains("token")){
+            if (msg.uri().contains(Consts.token)){
                 Map<String, String> reqMap = getReqMap(msg);
-                String token = reqMap.get("token");
-                Session session = redisTemplate.opsForValue().get(token);
-                if (Objects.nonNull(session)){
-                    NameSpace.bindChannelSession(ctx.channel(),session);
-                    ctx.fireChannelRead(msg.retain());
-                }
+                String token = reqMap.get(Consts.token);
+                ctx.channel().closeFuture().addListener((ChannelFutureListener)nameSpace::offline);
+                LineUser lineUser = userService.tokenUser(token);
+                nameSpace.userOnline(lineUser.toSession(ctx.channel()),ctx.channel());
+                ctx.fireChannelRead(msg.retain());
             }
          }
 

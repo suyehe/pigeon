@@ -1,7 +1,6 @@
 package com.suye.dto;
 
-import com.google.common.base.MoreObjects;
-import com.suye.consts.Protocol;
+
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,17 +13,14 @@ import java.io.Serializable;
  */
 @Data
 public class Session implements Serializable {
-    private long userId;
+    private Long userId;
 
-    private String username;
-
-    private String sessionId;
+    private Long sessionId;
 
     private String appId;
 
-    private String serverAddr;
+    private Server server;
 
-    private Protocol protocol;
 
     private String token;
 
@@ -32,15 +28,5 @@ public class Session implements Serializable {
 
 
 
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("sessionId", sessionId)
-                .add("app", appId)
-                .add("serverAddr", serverAddr)
-                .add("token", token)
-                .add("username", username)
-                .add("active", active)
-                .toString();
-    }
+
 }

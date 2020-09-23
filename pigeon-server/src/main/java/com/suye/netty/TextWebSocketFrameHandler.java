@@ -1,55 +1,50 @@
 package com.suye.netty;
 
-import com.suye.consts.Protocol;
-import com.suye.dto.RequestMessage;
-import com.suye.service.MessageDisruptor;
-import com.suye.service.NameSpace;
+import com.suye.service.Disruptor;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.net.ssl.HandshakeCompletedEvent;
 
 /**
  * @author radish
  * 处理websocket消息
  */
-@Component
 @ChannelHandler.Sharable
 @Slf4j
+@RequiredArgsConstructor
 public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
-    @Autowired
-    private MessageDisruptor disruptor;
+
+    private final Disruptor disruptor;
+
 
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof WebSocketServerProtocolHandler.HandshakeComplete) {
-            NameSpace.connect(ctx.channel());
+
         }
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, WebSocketFrame msg) throws Exception {
         if (msg instanceof TextWebSocketFrame) {
-            RequestMessage requestMessage = new RequestMessage();
-            requestMessage.setChannel(ctx.channel());
-            requestMessage.setProtocol(Protocol.WEBSOCKET);
-            requestMessage.setBody(((TextWebSocketFrame) msg).text());
-            disruptor.handlerMsg(requestMessage);
+            disruptor.disruptor(((TextWebSocketFrame) msg).text(),ctx.channel());
         }
 
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        log.info("channelInactive:");
+
     }
 
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.error("channel error:{}",cause);
+    }
 }

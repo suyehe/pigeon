@@ -1,7 +1,9 @@
 package com.suye.netty;
 
+
 import com.suye.consts.Consts;
 import com.suye.consts.Protocol;
+import com.suye.service.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -42,26 +44,30 @@ public class NettyServer {
 
     private Protocol protocol = Protocol.WEBSOCKET;
 
-    @Autowired
     private TextWebSocketFrameHandler webSocketFrameHandler;
+    @Autowired
+    private  NameSpace namespace;
 
     @Autowired
-    private DispatcherHandler dispatcherHandler;
+    private UserService userService;
+
+    private PreValidHandler preValidHandler;
     @PostConstruct
     public void start() {
+        preValidHandler=new PreValidHandler(namespace,userService);
+        webSocketFrameHandler=new TextWebSocketFrameHandler(new DefaultDisruptorImpl(namespace));
         ServerBootstrap bootstrap = new ServerBootstrap();
         EventLoopGroup parentGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("parentGroup"));
         EventLoopGroup workGroup = new NioEventLoopGroup(4, new DefaultThreadFactory("workGroup"));
         bootstrap.group(parentGroup, workGroup);
         bootstrap.channel(NioServerSocketChannel.class);
-
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel ch) throws Exception {
                 if (Objects.equals(Protocol.WEBSOCKET, protocol)) {
                     ch.pipeline().addLast(new HttpServerCodec());
                     ch.pipeline().addLast(new HttpObjectAggregator(64 * 1024));
-                    ch.pipeline().addLast(Consts.DISPACHER, dispatcherHandler);
+                    ch.pipeline().addLast(Consts.DISPACHER, preValidHandler);
                     ch.pipeline().addLast(new ChunkedWriteHandler());
                     ch.pipeline().addLast(new WebSocketServerProtocolHandler("/ws"));
                     ch.pipeline().addLast(webSocketFrameHandler);
@@ -69,7 +75,7 @@ public class NettyServer {
                 if (Objects.equals(Protocol.SELF, protocol)) {
                     ch.pipeline().addLast(new ObjectDecoder(ClassResolvers.softCachingResolver(String.class.getClassLoader())));
                     ch.pipeline().addLast(new ObjectEncoder());
-                    ch.pipeline().addLast(new DispatcherHandler());
+                    ch.pipeline().addLast(preValidHandler);
                 }
 
 

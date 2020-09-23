@@ -5,59 +5,81 @@
     <meta http-equiv="content-type" content="text/html"/>
     <title>WebSocket客户端</title>
 
-    <script type="text/javascript">
-        var socket;
-        if (!window.WebSocket) {
-            window.WebSocket = window.MozWebSocket;
-        }
-        if (window.WebSocket) {
-            //socket = new WebSocket("ws://localhost:9999/ws?token=ae766e27-04c3-487f-9f29-0f8c402077be");
-            socket = new WebSocket("ws://192.168.201.180:8888/ws?token=5618526e-281a-439d-98c5-6845c5d0d1e7");
-            socket.onmessage = function (event) {
-                var ta = document.getElementById("responseContent");
-                ta.value += event.data + "\r\n";
-            };
-            socket.onopen = function (event) {
-                var ta = document.getElementById("responseContent");
-                ta.value = "您当前的浏览器支持 WebSocket，请进行后续操作\r\n";
-                console.log("lll")
-               // socket.close(3999,"muji")
-            };
-            socket.onclose = function (event) {
-                var ta = document.getElementById("responseContent");
-                ta.value = "";
-                ta.value = "WebSocket 连接已近关闭\r\n";
-            };
-        } else {
-            alert("您的浏览器不支持 WebSocket");
-        }
-
-        function send(msg) {
-            if (!window.WebSocket) {
-                return;
-            }
-            if (socket.readyState == WebSocket.OPEN) {
-                socket.send(msg);
-
-            } else {
-                alert("WebSocket连接没有建立成功");
-            }
-        }
-
-    </script>
-
 </head>
 <body>
 
 <form onSubmit="return false;">
+    <input type="text" name="user" value=""/>
+    <input type="button" value="上线" onclick="line(this.form.user.value)"/>
     <input type="text" name="msg" value=""/>
-    <br/>
-    <br/>
+    <div id="users">
+        <select id="uu" >
+
+        </select>
+    </div>
     <input type="button" value="发送WebSocket请求消息" onclick="send(this.form.msg.value)"/>
     <hr color="red"/>
     <h2>客户端接收到服务端返回的应答消息</h2>
     <textarea id="responseContent" style="width: 1024px;height: 300px"></textarea>
 </form>
-
 </body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
+<script type="text/javascript">
+
+    var socket;
+    function line(user) {
+        var  token;
+        $.ajax({url:"http://localhost:8080/token?user="+user,success:function(result){
+            console.log(result)
+                if (!window.WebSocket) {
+                    window.WebSocket = window.MozWebSocket;
+                }
+                if (window.WebSocket) {
+                    socket = new WebSocket("ws://192.168.201.180:8888/ws?token="+result);
+                    socket.onmessage = function (event) {
+                        var ta = document.getElementById("responseContent");
+                        ta.value += event.data + "\r\n";
+                    };
+                    socket.onopen = function (event) {
+                        var ta = document.getElementById("responseContent");
+                        ta.value = "您当前的浏览器支持 WebSocket，请进行后续操作\r\n";
+                        console.log("lll")
+                        // socket.close(3999,"muji")
+                    };
+                    socket.onclose = function (event) {
+                        var ta = document.getElementById("responseContent");
+                        ta.value = "";
+                        ta.value = "WebSocket 连接已近关闭\r\n";
+                    };
+                } else {
+                    alert("您的浏览器不支持 WebSocket");
+                }
+            }});
+
+    }
+
+
+    function loadOnline() {
+        $.ajax({url:"http://localhost:8080/online",success:function(result) {
+                for (u in result){
+                    $("#uu").append("<option value =\"saab\">Saab</option>")
+                }
+            }});
+    }
+
+    function send(msg) {
+        if (!window.WebSocket) {
+            return;
+        }
+        if (socket.readyState == WebSocket.OPEN) {
+            socket.send(msg);
+
+        } else {
+            alert("WebSocket连接没有建立成功");
+        }
+    }
+    window.onload=function (ev) {
+        loadOnline();
+    }
+</script>
 </html>

@@ -15,4 +15,8 @@ public class Server {
     private String addr;
 
     private Protocol protocol;
+
+    public String serverAddr(){
+        return  addr;
+    }
 }
