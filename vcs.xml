@@ -134,6 +134,18 @@
           <option name="url" value="https://gitlab.dxy.net/dxy.com/ask-admin" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://gitlab.dxy.net/dxy.com/ask-wireless" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://gitlab.dxy.net/dxy.com/doctor-center" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://gitlab.dxy.net/dxy.com/drug-center" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="$USER_HOME$/project/open" />
