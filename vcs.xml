@@ -158,6 +158,10 @@
           <option name="url" value="git@gitlab.dxy.net:dxy.com/trade-center.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="git@gitlab.dxy.net:dxy.com/akira.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="$USER_HOME$/project/ask" />
