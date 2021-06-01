@@ -5,6 +5,7 @@
       <mapping pattern="hello" type="PLAIN_TEXT" />
       <mapping pattern="METE-INF" type="PLAIN_TEXT" />
       <mapping pattern="README" type="PLAIN_TEXT" />
+      <mapping ext="factories" type="PLAIN_TEXT" />
       <mapping ext="def" type="PLAIN_TEXT" />
       <mapping ext="text" type="PLAIN_TEXT" />
       <mapping ext="properries" type="PLAIN_TEXT" />
