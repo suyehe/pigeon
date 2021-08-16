@@ -198,6 +198,10 @@
           <option name="url" value="git@gitlab.dxy.net:dxy-framework/dxy-framework-sharding.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://gitlab.dxy.net/platform/module-tools.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="$USER_HOME$/project" />
