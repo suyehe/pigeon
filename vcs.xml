@@ -208,6 +208,6 @@
         </UrlAndUserName>
       </list>
     </option>
-    <option name="cloneParentDir" value="$USER_HOME$/project" />
+    <option name="cloneParentDir" value="$USER_HOME$/open" />
   </component>
 </application>
