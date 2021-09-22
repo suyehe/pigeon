@@ -210,6 +210,10 @@
           <option name="url" value="https://github.com/apache/skywalking-java.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="git@gitlab.dxy.net:platform/plugin-pay.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="$USER_HOME$/open" />
